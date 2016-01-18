@@ -1,0 +1,69 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>{% block title %}{% endblock %}</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	
+	{% block extrahead %}{% endblock %}
+</head>
+<body>
+	<div>	
+		{% if request.user.is_authenticated %}
+			<p style="float:left">
+				Hi, {{ request.user.get_full_name|default:request.user.username }}	
+			</p>
+
+			<p style="float:left; margin-left:10px;">
+				<a href="{% url 'logout' %}">Logout</a>
+			</p>
+		{% else %}
+			You are not logged in
+			<br>
+			<a href="{% url 'login' %}">Login</a>
+			<a href="{% url 'signup' %}">Signup</a>
+		{% endif %}
+		<br>
+	</div>
+
+
+<script type="text/javascript" src="{% static 'omnibus/omnibus.js' %}"></script>
+
+{% if request.user.is_authenticated %}
+	<script type="text/javascript">
+	(function () {
+
+	// Select a transport implementation:
+	var transport = WebSocket; // SockJS can be used alternatively
+
+	// Receive the path for the connection from the django template context:
+	var endpoint = '{{ OMNIBUS_ENDPOINT }}';
+
+	var options = {authToken: '{{ OMNIBUS_AUTH_TOKEN }}'};
+	var connection = new Omnibus(transport, endpoint, options);
+
+	var channel = connection.openChannel('{{ request.user.pk }}');
+	// Add events on channel:
+	channel.on('approval', function (event) {
+			$("#notification").append(event.data.payload.message + '<br>');
+			$("#notification-time").append(event.data.payload.timestamp + '<br>');
+	});
+	}
+	)();
+	</script>
+	<div id='notif' style="float:right; width: auto; rgba(131, 179, 220, 0.15);">
+		<p>Notifications</p>
+		<br>
+		<span style="font-size: x-small;">
+		<p style='float:left; margin-right:5px;' id='notification'></p>
+		<p id='notification-time'></p>
+		</span>
+	</div>
+
+{% endif %}
+
+{% block header %} {% endblock %}
+{% block content %} {% endblock %}
+{% block footer %} {% endblock %}
+</body>
+</html>

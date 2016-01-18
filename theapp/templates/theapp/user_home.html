@@ -1,0 +1,45 @@
+{% extends "theapp/base.html" %}
+{% load static %}
+
+{% block title %} Home {% endblock %}
+
+{% block content %}
+
+<div style='padding-left:45%;'>
+	<h3> Home </h3>
+</div>
+
+{% if request.session.message %}
+{{ request.session.message }}
+{% endif %}
+
+{# If logged in, but email not verified #}
+{% if not_verified %}
+
+	<p>
+		{% for error in errors %}
+			<ul>{{ error }}</ul>
+		{% endfor %}
+	</p>
+
+	<a href="{% url 'send-confirmation-email' %}">
+		Click here to send a confirmation mail again.
+	</a>
+
+{% else %}
+<hr>
+{% if request.user.is_staff %}
+<a href="{% url 'approvals' %}">Check users awaiting approval</a>
+{% else %}
+
+Here are your approvals:
+
+	{% for approval in approvals %}
+		<ul>
+			{{ approval.admin_type.name }} - {{ approval.get_approval_display }}
+		</ul>
+	{% endfor %}
+{% endif %}
+{% endif %}
+
+{% endblock %}

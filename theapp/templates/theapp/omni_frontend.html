@@ -1,0 +1,46 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Notification testing</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+</head>
+<body>
+
+<script type="text/javascript" src="{% static 'omnibus/omnibus.js' %}"></script>
+
+
+<script type="text/javascript">
+(function () {
+
+// Select a transport implementation:
+var transport = WebSocket; // SockJS can be used alternatively
+
+// Receive the path for the connection from the django template context:
+var endpoint = '{{ OMNIBUS_ENDPOINT }}';
+
+var options = {authToken: '{{ OMNIBUS_AUTH_TOKEN }}'};
+var connection = new Omnibus(transport, endpoint, options);
+
+var channel = connection.openChannel('test-channel');
+// Add events on channel:
+channel.on('myevent', function (event) {
+		$("#notification").append(event.data.payload.message + '<br>');
+		$("#notification-time").append(event.data.payload.timestamp + '<br>');
+});
+}
+)();
+</script>
+
+
+See the notification here:
+<br>
+============
+<div>
+	<p style='float:left; margin-right: margin-right:50px;' id='notification'></p> <p style='float:left;' id='notification-time'></p>
+</div>
+
+============
+</body>
+</html>
