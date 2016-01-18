@@ -22,7 +22,8 @@ System level dependencies:
 	
 	sudo apt-get install rabbitmq-server
 
-Run main() in `initial_data.py` in Django shell:
+Run main() in `initial_data.py` in Django shell,
+to crudely install some initial data (users, groups, admins..)
 	
 	>>>from initial_data import main
 	>>>main()
