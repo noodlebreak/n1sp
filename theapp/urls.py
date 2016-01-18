@@ -13,8 +13,6 @@ urlpatterns = [
     url(r'^send-confirmation$', views.generate_confirmation,
         name='send-confirmation-email'),
 
-    url(r'^home$', views.user_home, name='user-home'),
-
     url(r'^approve/(?P<user_id>\d+)$',
         views.approve_user, name='approve-user'),
     url(r'^approvals$',
@@ -22,6 +20,8 @@ urlpatterns = [
 
     url(r'^email-confirm/(?P<token>[a-zA-Z0-9]+)$',
         views.confirm_email, name='email-confirm'),
+
+    url(r'', views.user_home, name='user-home'),
 
     # url(r'^signup$', admin.site.urls),
 ]
