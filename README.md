@@ -12,9 +12,15 @@ etc
 Running
 ========
 
-Install dependencies:
+Install Python dependencies:
 	
 	pip install -r requirements.txt
+
+System level dependencies:
+	
+* Install rabbitmq-server (for celery):
+	
+	sudo apt-get install rabbitmq-server
 
 Run main() in `initial_data.py` in Django shell:
 	
